@@ -1,0 +1,33 @@
+{
+  "name": "Must-Stash",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Enhanced Personalized Search Tool",
+  "icons": {
+    "16": "muststash_temp_icon.png",
+    "48": "muststash_temp_icon.png",
+    "128": "muststash_temp_icon.png"
+  },
+  "permissions": [
+    "history",
+    "activeTab",
+    "tabs",
+    "storage",
+    "bookmarks",
+    "downloads",
+    "unlimitedStorage",
+    "webNavigation",
+    "webRequest",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "browser_action": {
+    "default_popup": "./components/popup/popup.html",
+    "default_icon": "muststash_temp_icon.png"
+  },
+  "options_page": "./components/options/options.html",
+  "background": {
+    "persistent": true,
+    "scripts": ["jquery.js", "./components/background/background.js"]
+  }
+}
