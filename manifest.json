@@ -13,21 +13,18 @@
     "activeTab",
     "tabs",
     "storage",
-    "bookmarks",
-    "downloads",
-    "unlimitedStorage",
     "webNavigation",
     "webRequest",
     "http://*/*",
     "https://*/*"
   ],
   "browser_action": {
-    "default_popup": "./components/popup/popup.html",
+    "default_popup": "./popup/popup.html",
     "default_icon": "muststash_temp_icon.png"
   },
-  "options_page": "./components/options/options.html",
+  "options_page": "./options/options.html",
   "background": {
     "persistent": true,
-    "scripts": ["jquery.js", "./components/background/background.js"]
+    "scripts": ["jquery.js", "./background/background.js"]
   }
 }
