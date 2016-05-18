@@ -46,14 +46,73 @@ chrome.runtime.onInstalled.addListener(function(data){
 
 //sends activity data.
 chrome.webNavigation.onCommitted.addListener(function(data) {
+  if(data.url === "https://www.reddit.com/"){
+    chrome.storage.local.clear(function(){
+      console.log("storage cleared");
 
-  console.log("activity", data);
+      chrome.storage.local.get(["data"], function(result){
+        console.log("cleared?", result);
+      })
+
+    })
+  }
+
+  if(data.url === "https://www.codecademy.com/"){
+    chrome.storage.local.get(["data"], function(result){
+      console.log("checkdata", JSON.parse(result.data));
+    })
+  }
+
+
+  if(data.transitionType === "link"){
+    data.interaction = "activity";
+
+    chrome.storage.local.get(["data"], function(items){
+      if(Object.keys(items).length === 0){
+        chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
+          console.log("saved data to storage");
+        });
+      }
+      else {
+        var dataArray = JSON.parse(items.data);
+        dataArray.push(data);
+
+        chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
+          console.log("saved data to storage");
+        });
+      }
+    })
+
+
+  }
 
 
 });
 
 chrome.webRequest.onCompleted.addListener(function(data){
 
-  console.log("query", data);
+  console.log(data);
 
-}, {urls: ["*://www.google.com/search?*"], types: ['xmlhttprequest']});
+  data.interaction = "query";
+  chrome.storage.local.get(["data"], function(items){
+    if(Object.keys(items).length === 0){
+      chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
+        console.log("saved data to storage");
+      });
+    }
+    else {
+      var dataArray = JSON.parse(items.data);
+
+      if(dataArray[dataArray.length -1].interaction === "query"){
+        dataArray.pop();
+      }
+
+      dataArray.push(data);
+
+      chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
+        console.log("saved data to storage");
+      });
+    }
+  })
+
+}, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
