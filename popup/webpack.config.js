@@ -1,7 +1,7 @@
 module.exports = {
-  entry: '',
+  entry: './popup.js',
   output: {
-    filename: ''
+    filename: './js/popup-bundle.js'
   },
   devtool: 'source-map',
   module: {

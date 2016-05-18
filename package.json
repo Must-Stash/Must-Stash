@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "css:build": "./node_modules/.bin/node-sass ./scss/styles.scss ./public/css/styles.css -w scss/",
-    "dev": "parallelshell 'npm run css:build'"
+    "js:build": "./node_modules/.bin/webpack --progress --colors --watch",
+    "dev": "parallelshell 'npm run css:build' 'npm run js:build'"
   },
   "repository": {
     "type": "git",
@@ -43,4 +44,3 @@
     "react-router": "^2.4.0"
   }
 }
-
