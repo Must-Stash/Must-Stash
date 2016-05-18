@@ -63,6 +63,10 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
     })
   }
 
+  if(data.url === "https://www.freecodecamp.com/"){
+    clearInterval(sendInterval);
+    console.log("interval cleared");
+  }
 
   if(data.transitionType === "link"){
     data.interaction = "activity";
@@ -116,3 +120,13 @@ chrome.webRequest.onCompleted.addListener(function(data){
   })
 
 }, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
+
+
+//periodically sending localstorage to database
+function transferLocalStorage(){
+  chrome.storage.local.get(["data"], function(data){
+    console.log(JSON.parse(data.data));
+  })
+}
+
+var sendInterval = setInterval(transferLocalStorage, 1000);
