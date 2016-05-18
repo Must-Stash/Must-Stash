@@ -78,7 +78,7 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
     chrome.storage.local.get(["data"], function(items){
       if(Object.keys(items).length === 0){
         chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
-          console.log("saved data to storage");
+          console.log("saved activity to storage");
         });
       }
       else {
@@ -86,7 +86,7 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
         dataArray.push(data);
 
         chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
-          console.log("saved data to storage");
+          console.log("saved activity to storage");
         });
       }
     })
@@ -105,7 +105,7 @@ chrome.webRequest.onCompleted.addListener(function(data){
   chrome.storage.local.get(["data"], function(items){
     if(Object.keys(items).length === 0){
       chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
-        console.log("saved data to storage");
+        console.log("saved query to storage");
       });
     }
     else {
@@ -118,7 +118,7 @@ chrome.webRequest.onCompleted.addListener(function(data){
       dataArray.push(data);
 
       chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
-        console.log("saved data to storage");
+        console.log("saved query to storage");
       });
     }
   })
@@ -144,14 +144,12 @@ function transferLocalStorage(){
           data: JSON.parse(data.data)
         },
         success: function(response) {
-          console.log(response);
           chrome.storage.local.clear(function(){
             console.log("storage cleared");
 
             chrome.storage.local.get(["data"], function(result){
               console.log("cleared?", result);
             })
-
           })
         }
       });
