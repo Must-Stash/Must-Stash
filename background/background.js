@@ -59,7 +59,12 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
 
   if(data.url === "https://www.codecademy.com/"){
     chrome.storage.local.get(["data"], function(result){
-      console.log("checkdata", JSON.parse(result.data));
+      try{
+        console.log("checkdata", JSON.parse(result.data));
+      }
+      catch(err){
+        console.log("data object is empty");
+      }
     })
   }
 
@@ -134,7 +139,7 @@ function transferLocalStorage(){
 
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:3000/queries",
+        url: "http://127.0.0.1:3000/api/queries",
         dataType: 'json',
         data: {
           data: JSON.parse(data.data)
