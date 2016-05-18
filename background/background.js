@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(function(data){
 
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:3000/data",
+        url: "http://127.0.0.1:3000/api/history",
         dataType: 'json',
         data: {
           urls : JSON.stringify(urls)
@@ -43,53 +43,76 @@ chrome.runtime.onInstalled.addListener(function(data){
   }
 });
 
-// //get information before navigation
-// chrome.webNavigation.onBeforeNavigate.addListener(function(data) {
-//   var queryInfo = {
-//     active: true,
-//     currentWindow: true
-//   };
-
-//   chrome.tabs.query(queryInfo, function(tabs) {
-//     if(tabs[0].title){
-//       console.log("URL", tabs[0].title);
-//     }
-//   });
-// });
 
 //sends activity data.
 chrome.webNavigation.onCommitted.addListener(function(data) {
+  if(data.url === "https://www.reddit.com/"){
+    chrome.storage.local.clear(function(){
+      console.log("storage cleared");
 
-  console.log("activity", data);
+      chrome.storage.local.get(["data"], function(result){
+        console.log("cleared?", result);
+      })
 
-  $.ajax({
-    type: "POST",
-    url: "http://127.0.0.1:3000/activity",
-    dataType: 'json',
-    data: {
-      committedData: data
-    },
-    success: function(data) {
+    })
+  }
 
-    }
-  });
+  if(data.url === "https://www.codecademy.com/"){
+    chrome.storage.local.get(["data"], function(result){
+      console.log("checkdata", JSON.parse(result.data));
+    })
+  }
+
+
+  if(data.transitionType === "link"){
+    data.interaction = "activity";
+
+    chrome.storage.local.get(["data"], function(items){
+      if(Object.keys(items).length === 0){
+        chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
+          console.log("saved data to storage");
+        });
+      }
+      else {
+        var dataArray = JSON.parse(items.data);
+        dataArray.push(data);
+
+        chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
+          console.log("saved data to storage");
+        });
+      }
+    })
+
+
+  }
+
 
 });
 
 chrome.webRequest.onCompleted.addListener(function(data){
 
-  console.log("query", data);
+  console.log(data);
 
-  $.ajax({
-    type: "POST",
-    url: "http://127.0.0.1:3000/query",
-    dataType: 'json',
-    data: {
-      committedData: data
-    },
-    success: function(data) {
-
+  data.interaction = "query";
+  chrome.storage.local.get(["data"], function(items){
+    if(Object.keys(items).length === 0){
+      chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
+        console.log("saved data to storage");
+      });
     }
-  });
+    else {
+      var dataArray = JSON.parse(items.data);
 
-}, {urls: ["*://www.google.com/search?*"], types: ['xmlhttprequest']});
+      if(dataArray[dataArray.length -1].interaction === "query"){
+        dataArray.pop();
+      }
+
+      dataArray.push(data);
+
+      chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
+        console.log("saved data to storage");
+      });
+    }
+  })
+
+}, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
