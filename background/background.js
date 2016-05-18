@@ -125,8 +125,36 @@ chrome.webRequest.onCompleted.addListener(function(data){
 //periodically sending localstorage to database
 function transferLocalStorage(){
   chrome.storage.local.get(["data"], function(data){
-    console.log(JSON.parse(data.data));
+
+    if(Object.keys(data).length === 0){
+      console.log("No new queries or activity");
+    }
+    else {
+      console.log(JSON.parse(data.data));
+
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:3000/queries",
+        dataType: 'json',
+        data: {
+          data: JSON.parse(data.data)
+        },
+        success: function(response) {
+          console.log(response);
+          chrome.storage.local.clear(function(){
+            console.log("storage cleared");
+
+            chrome.storage.local.get(["data"], function(result){
+              console.log("cleared?", result);
+            })
+
+          })
+        }
+      });
+
+    }
+
   })
 }
 
-var sendInterval = setInterval(transferLocalStorage, 1000);
+var sendInterval = setInterval(transferLocalStorage, 10000);
