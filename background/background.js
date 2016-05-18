@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(function(data){
 
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:3000/data",
+        url: "http://127.0.0.1:3000/api/history",
         dataType: 'json',
         data: {
           urls : JSON.stringify(urls)
@@ -43,53 +43,17 @@ chrome.runtime.onInstalled.addListener(function(data){
   }
 });
 
-// //get information before navigation
-// chrome.webNavigation.onBeforeNavigate.addListener(function(data) {
-//   var queryInfo = {
-//     active: true,
-//     currentWindow: true
-//   };
-
-//   chrome.tabs.query(queryInfo, function(tabs) {
-//     if(tabs[0].title){
-//       console.log("URL", tabs[0].title);
-//     }
-//   });
-// });
 
 //sends activity data.
 chrome.webNavigation.onCommitted.addListener(function(data) {
 
   console.log("activity", data);
 
-  $.ajax({
-    type: "POST",
-    url: "http://127.0.0.1:3000/activity",
-    dataType: 'json',
-    data: {
-      committedData: data
-    },
-    success: function(data) {
-
-    }
-  });
 
 });
 
 chrome.webRequest.onCompleted.addListener(function(data){
 
   console.log("query", data);
-
-  $.ajax({
-    type: "POST",
-    url: "http://127.0.0.1:3000/query",
-    dataType: 'json',
-    data: {
-      committedData: data
-    },
-    success: function(data) {
-
-    }
-  });
 
 }, {urls: ["*://www.google.com/search?*"], types: ['xmlhttprequest']});
