@@ -43,7 +43,6 @@ chrome.runtime.onInstalled.addListener(function(data){
   }
 });
 
-
 //sends activity data.
 chrome.webNavigation.onCommitted.addListener(function(data) {
   if(data.url === "https://www.reddit.com/"){
