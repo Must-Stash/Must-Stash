@@ -43,7 +43,6 @@ chrome.runtime.onInstalled.addListener(function(data){
   }
 });
 
-
 //sends activity data.
 chrome.webNavigation.onCommitted.addListener(function(data) {
   if(data.url === "https://www.reddit.com/"){
@@ -59,10 +58,19 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
 
   if(data.url === "https://www.codecademy.com/"){
     chrome.storage.local.get(["data"], function(result){
-      console.log("checkdata", JSON.parse(result.data));
+      try{
+        console.log("checkdata", JSON.parse(result.data));
+      }
+      catch(err){
+        console.log("data object is empty");
+      }
     })
   }
 
+  if(data.url === "https://www.freecodecamp.com/"){
+    clearInterval(sendInterval);
+    console.log("interval cleared");
+  }
 
   if(data.transitionType === "link"){
     data.interaction = "activity";
@@ -70,7 +78,7 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
     chrome.storage.local.get(["data"], function(items){
       if(Object.keys(items).length === 0){
         chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
-          console.log("saved data to storage");
+          console.log("saved activity to storage");
         });
       }
       else {
@@ -78,7 +86,7 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
         dataArray.push(data);
 
         chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
-          console.log("saved data to storage");
+          console.log("saved activity to storage");
         });
       }
     })
@@ -97,7 +105,7 @@ chrome.webRequest.onCompleted.addListener(function(data){
   chrome.storage.local.get(["data"], function(items){
     if(Object.keys(items).length === 0){
       chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
-        console.log("saved data to storage");
+        console.log("saved query to storage");
       });
     }
     else {
@@ -110,9 +118,45 @@ chrome.webRequest.onCompleted.addListener(function(data){
       dataArray.push(data);
 
       chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
-        console.log("saved data to storage");
+        console.log("saved query to storage");
       });
     }
   })
 
 }, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
+
+
+//periodically sending localstorage to database
+function transferLocalStorage(){
+  chrome.storage.local.get(["data"], function(data){
+
+    if(Object.keys(data).length === 0){
+      console.log("No new queries or activity");
+    }
+    else {
+      console.log(JSON.parse(data.data));
+
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:3000/api/queries",
+        dataType: 'json',
+        data: {
+          data: JSON.parse(data.data)
+        },
+        success: function(response) {
+          chrome.storage.local.clear(function(){
+            console.log("storage cleared");
+
+            chrome.storage.local.get(["data"], function(result){
+              console.log("cleared?", result);
+            })
+          })
+        }
+      });
+
+    }
+
+  })
+}
+
+var sendInterval = setInterval(transferLocalStorage, 10000);
