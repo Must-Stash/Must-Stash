@@ -73,13 +73,16 @@
 	  document.getElementById('query').innerHTML = title;
 	  var terms = title.toLowerCase().split(" ");
 	  terms = terms.slice(0, terms.length - 3).join(" ");
+	  console.log(terms);
+	  console.log("ENCODED", encodeURIComponent(terms));
 	
 	  $.ajax({
 	    type: "GET",
-	    url: "http://127.0.0.1:3000/data/" + terms,
+	    url: "http://127.0.0.1:3000/api/search?q=" + encodeURIComponent(terms),
 	    success: function success(data) {
-	      myHistory.innerHTML = data.best;
-	      myHistory.href = data.best;
+	      console.log(data.success[0]._source.url);
+	      myHistory.innerHTML = data.success[0]._source.url;
+	      myHistory.href = data.success[0]._source.url;
 	    }
 	  });
 	});
