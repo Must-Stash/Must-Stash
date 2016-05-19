@@ -97,33 +97,33 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
 
 });
 
-chrome.webRequest.onCompleted.addListener(function(data){
+// chrome.webRequest.onCompleted.addListener(function(data){
 
-  console.log(data);
+//   console.log(data);
 
-  data.interaction = "query";
-  chrome.storage.local.get(["data"], function(items){
-    if(Object.keys(items).length === 0){
-      chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
-        console.log("saved query to storage");
-      });
-    }
-    else {
-      var dataArray = JSON.parse(items.data);
+//   data.interaction = "query";
+//   chrome.storage.local.get(["data"], function(items){
+//     if(Object.keys(items).length === 0){
+//       chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
+//         console.log("saved query to storage");
+//       });
+//     }
+//     else {
+//       var dataArray = JSON.parse(items.data);
 
-      if(dataArray[dataArray.length -1].interaction === "query"){
-        dataArray.pop();
-      }
+//       if(dataArray[dataArray.length -1].interaction === "query"){
+//         dataArray.pop();
+//       }
 
-      dataArray.push(data);
+//       dataArray.push(data);
 
-      chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
-        console.log("saved query to storage");
-      });
-    }
-  })
+//       chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
+//         console.log("saved query to storage");
+//       });
+//     }
+//   })
 
-}, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
+// }, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
 
 
 //periodically sending localstorage to database
@@ -138,7 +138,7 @@ function transferLocalStorage(){
 
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:3000/api/queries",
+        url: "http://127.0.0.1:3000/api/activities",
         dataType: 'json',
         data: {
           data: JSON.parse(data.data)
