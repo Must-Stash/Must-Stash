@@ -36,7 +36,7 @@ getUrl(function(url, title){
     type: "GET",
     url: "http://127.0.0.1:3000/api/search?q=" + encodeURIComponent(terms),
     success: function(data) {
-      console.log(data.success[0]._source.url);
+      console.log(data);
       myHistory.innerHTML = data.success[0]._source.url;
       myHistory.href = data.success[0]._source.url;
     }
