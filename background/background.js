@@ -179,3 +179,9 @@ function transferLocalStorage(){
 }
 
 var sendInterval = setInterval(transferLocalStorage, 10000);
+
+function onStartup(details) {
+  console.log("started up", details);
+}
+
+chrome.runtime.onStartup.addListener( onStartup );
