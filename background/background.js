@@ -162,6 +162,7 @@ function transferLocalStorage(){
               data: payload
             },
             success: function(response) {
+              console.log("payload sent");
               chrome.storage.local.set({['activities']: JSON.stringify([])}, function(){
                 console.log("cleared activity localstorage");
               });
