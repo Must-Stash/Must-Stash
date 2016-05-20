@@ -49,7 +49,7 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
     chrome.storage.local.clear(function(){
       console.log("storage cleared");
 
-      chrome.storage.local.get(["data"], function(result){
+      chrome.storage.local.get(["activites","queries"], function(result){
         console.log("cleared?", result);
       })
 
@@ -57,12 +57,13 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
   }
 
   if(data.url === "https://www.codecademy.com/"){
-    chrome.storage.local.get(["data"], function(result){
+    chrome.storage.local.get(["queries", "activities"], function(result){
       try{
-        console.log("checkdata", JSON.parse(result.data));
+        console.log("checkdata queries", JSON.parse(result.queries));
+        console.log("checkdata queries", JSON.parse(result.activities));
       }
       catch(err){
-        console.log("data object is empty");
+        console.log("object is empty");
       }
     })
   }
@@ -75,84 +76,105 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
   if(data.transitionType === "link"){
     data.interaction = "activity";
 
-    chrome.storage.local.get(["data"], function(items){
+    chrome.storage.local.get(["activities"], function(items){
       if(Object.keys(items).length === 0){
-        chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
+        chrome.storage.local.set({['activities']: JSON.stringify([data])}, function(){
           console.log("saved activity to storage");
         });
       }
       else {
-        var dataArray = JSON.parse(items.data);
+        var dataArray = JSON.parse(items.activities);
         dataArray.push(data);
 
-        chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
+        chrome.storage.local.set({['activities']: JSON.stringify(dataArray)}, function(){
           console.log("saved activity to storage");
         });
       }
     })
-
-
   }
-
 
 });
 
-// chrome.webRequest.onCompleted.addListener(function(data){
+chrome.webRequest.onCompleted.addListener(function(data){
 
-//   console.log(data);
+  console.log(data);
 
-//   data.interaction = "query";
-//   chrome.storage.local.get(["data"], function(items){
-//     if(Object.keys(items).length === 0){
-//       chrome.storage.local.set({['data']: JSON.stringify([data])}, function(){
-//         console.log("saved query to storage");
-//       });
-//     }
-//     else {
-//       var dataArray = JSON.parse(items.data);
-
-//       if(dataArray[dataArray.length -1].interaction === "query"){
-//         dataArray.pop();
-//       }
-
-//       dataArray.push(data);
-
-//       chrome.storage.local.set({['data']: JSON.stringify(dataArray)}, function(){
-//         console.log("saved query to storage");
-//       });
-//     }
-//   })
-
-// }, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
-
-
-//periodically sending localstorage to database
-function transferLocalStorage(){
-  chrome.storage.local.get(["data"], function(data){
-
-    if(Object.keys(data).length === 0){
-      console.log("No new queries or activity");
+  data.interaction = "query";
+  chrome.storage.local.get(["queries"], function(items){
+    if(Object.keys(items).length === 0){
+      chrome.storage.local.set({['queries']: JSON.stringify([data])}, function(){
+        console.log("saved query to storage");
+      });
     }
     else {
-      console.log(JSON.parse(data.data));
+      var dataArray = JSON.parse(items.queries);
 
-      $.ajax({
-        type: "POST",
-        url: "http://127.0.0.1:3000/api/activities",
-        dataType: 'json',
-        data: {
-          data: JSON.parse(data.data)
-        },
-        success: function(response) {
-          chrome.storage.local.clear(function(){
-            console.log("storage cleared");
+      dataArray.push(data);
 
-            chrome.storage.local.get(["data"], function(result){
-              console.log("cleared?", result);
-            })
-          })
-        }
+      chrome.storage.local.set({['queries']: JSON.stringify(dataArray)}, function(){
+        console.log("saved query to storage");
       });
+    }
+  })
+
+}, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
+
+
+// periodically sending localstorage to database
+function transferLocalStorage(){
+  chrome.storage.local.get(["activities"], function(activities){
+
+    if(Object.keys(activities).length === 0){
+      console.log("No new activities");
+    }
+    else {
+
+      chrome.storage.local.get(["queries"], function(queries){
+
+        var payload = [];
+
+        var allActivities = JSON.parse(activities.activities);
+        var allQueries = JSON.parse(queries.queries);
+
+        allActivities.forEach(function(element){
+          var packet = {
+            activity : element
+          }
+
+          for (var i = allQueries.length - 1; i >= 0; i--){
+            if(allQueries[i].tabId === element.tabId
+            && allQueries[i].timeStamp < element.timeStamp) {
+              packet.query = allQueries[i];
+              break;
+            }
+          }
+
+          payload.push(packet);
+
+        })
+
+        console.log(payload);
+
+      })
+
+
+      // $.ajax({
+      //   type: "POST",
+      //   url: "http://127.0.0.1:3000/api/activities",
+      //   dataType: 'json',
+      //   data: {
+      //     data: JSON.parse(data.data)
+      //   },
+      //   success: function(response) {
+      //     chrome.storage.local.clear(function(){
+      //       console.log("storage cleared");
+
+      //       chrome.storage.local.get(["data"], function(result){
+      //         console.log("cleared?", result);
+      //       })
+      //     })
+      //   }
+      // });
 
     }
 
