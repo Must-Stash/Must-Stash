@@ -180,8 +180,10 @@ function transferLocalStorage(){
 
 var sendInterval = setInterval(transferLocalStorage, 10000);
 
-function onStartup(details) {
-  console.log("started up", details);
+function onStartup() {
+  chrome.storage.local.set({['queries']: JSON.stringify([])}, function(){
+    console.log("cleared queries localstorage");
+  });
 }
 
 chrome.runtime.onStartup.addListener( onStartup );
