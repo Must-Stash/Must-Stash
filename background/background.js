@@ -153,21 +153,24 @@ function transferLocalStorage(){
 
         })
 
-        console.log(payload);
-
-        $.ajax({
-          type: "POST",
-          url: "http://127.0.0.1:3000/api/qa",
-          dataType: 'json',
-          data: {
-            data: payload
-          },
-          success: function(response) {
-            chrome.storage.local.set({['activities']: JSON.stringify([])}, function(){
-              console.log("cleared activity localstorage");
-            });
-          }
-        });
+        if(payload.length > 0){
+          $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:3000/api/qa",
+            dataType: 'json',
+            data: {
+              data: payload
+            },
+            success: function(response) {
+              chrome.storage.local.set({['activities']: JSON.stringify([])}, function(){
+                console.log("cleared activity localstorage");
+              });
+            }
+          });
+        }
+        else {
+          console.log("no payload")
+        }
 
       })
 
