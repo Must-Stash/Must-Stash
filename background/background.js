@@ -6,33 +6,24 @@ chrome.runtime.onInstalled.addListener(function(data){
     var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 30;
     var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
 
-    var urls = {};
-
     chrome.history.search({
       'text' : "",
       'startTime' : oneWeekAgo,
       'maxResults' : 100000
     }, function(historyItems){
 
-      historyItems.forEach(function(historyItem){
-        var histUrl = historyItem.url.toLowerCase();
-
-        if(histUrl.indexOf("google") === -1){
-          urls[histUrl] = historyItem;
-
-          chrome.history.getVisits({url : historyItem.url}, function(itemInfo){
-            urls[histUrl].info = itemInfo;
-          });
-        }
-
+      var payload = historyItems.map(function(element){
+        return {
+          activity : element
+        };
       });
 
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:3000/api/history",
+        url: "http://127.0.0.1:3000/api/qa",
         dataType: 'json',
         data: {
-          urls : JSON.stringify(urls)
+          data : payload
         },
         success: function(data) {
           console.log(data);
@@ -40,6 +31,7 @@ chrome.runtime.onInstalled.addListener(function(data){
       });
 
     });
+
   }
 });
 
@@ -51,9 +43,9 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
 
       chrome.storage.local.get(["activites","queries"], function(result){
         console.log("cleared?", result);
-      })
+      });
 
-    })
+    });
   }
 
   if(data.url === "https://www.codecademy.com/"){
@@ -65,7 +57,7 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
       catch(err){
         console.log("object is empty");
       }
-    })
+    });
   }
 
   if(data.url === "https://www.freecodecamp.com/"){
@@ -90,7 +82,7 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
           console.log("saved activity to storage");
         });
       }
-    })
+    });
   }
 
 });
@@ -115,7 +107,7 @@ chrome.webRequest.onCompleted.addListener(function(data){
         console.log("saved query to storage");
       });
     }
-  })
+  });
 
 }, {urls: ["*://www.google.com/search*", "*://www.google.com/complete/search*"], types: ['xmlhttprequest']});
 
@@ -139,7 +131,7 @@ function transferLocalStorage(callback){
         allActivities.forEach(function(element){
           var packet = {
             activity : element
-          }
+          };
 
           for (var i = allQueries.length - 1; i >= 0; i--){
             if(allQueries[i].tabId === element.tabId
@@ -151,7 +143,7 @@ function transferLocalStorage(callback){
 
           payload.push(packet);
 
-        })
+        });
 
         if(payload.length > 0){
           $.ajax({
