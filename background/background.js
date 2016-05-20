@@ -121,7 +121,7 @@ chrome.webRequest.onCompleted.addListener(function(data){
 
 
 // periodically sending localstorage to database
-function transferLocalStorage(){
+function transferLocalStorage(callback){
   chrome.storage.local.get(["activities"], function(activities){
 
     if(Object.keys(activities).length === 0){
@@ -166,6 +166,9 @@ function transferLocalStorage(){
               chrome.storage.local.set({['activities']: JSON.stringify([])}, function(){
                 console.log("cleared activity localstorage");
               });
+              if(callback){
+                callback();
+              }
             }
           });
         }
@@ -182,12 +185,15 @@ function transferLocalStorage(){
   })
 }
 
-var sendInterval = setInterval(transferLocalStorage, 10000);
+var sendInterval = setInterval(transferLocalStorage, 20000);
 
 function onStartup() {
-  chrome.storage.local.set({['queries']: JSON.stringify([])}, function(){
-    console.log("cleared queries localstorage");
+  transferLocalStorage(function(){
+    chrome.storage.local.set({['queries']: JSON.stringify([])}, function(){
+      console.log("cleared queries localstorage");
+    });
   });
+
 }
 
 chrome.runtime.onStartup.addListener( onStartup );
