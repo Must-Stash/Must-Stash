@@ -60,7 +60,7 @@ chrome.webNavigation.onCommitted.addListener(function(data) {
     chrome.storage.local.get(["queries", "activities"], function(result){
       try{
         console.log("checkdata queries", JSON.parse(result.queries));
-        console.log("checkdata queries", JSON.parse(result.activities));
+        console.log("checkdata activities", JSON.parse(result.activities));
       }
       catch(err){
         console.log("object is empty");
@@ -155,26 +155,23 @@ function transferLocalStorage(){
 
         console.log(payload);
 
+        $.ajax({
+          type: "POST",
+          url: "http://127.0.0.1:3000/api/qa",
+          dataType: 'json',
+          data: {
+            data: payload
+          },
+          success: function(response) {
+            chrome.storage.local.set({['activities']: JSON.stringify([])}, function(){
+              console.log("cleared activity localstorage");
+            });
+          }
+        });
+
       })
 
 
-      // $.ajax({
-      //   type: "POST",
-      //   url: "http://127.0.0.1:3000/api/activities",
-      //   dataType: 'json',
-      //   data: {
-      //     data: JSON.parse(data.data)
-      //   },
-      //   success: function(response) {
-      //     chrome.storage.local.clear(function(){
-      //       console.log("storage cleared");
-
-      //       chrome.storage.local.get(["data"], function(result){
-      //         console.log("cleared?", result);
-      //       })
-      //     })
-      //   }
-      // });
 
     }
 
