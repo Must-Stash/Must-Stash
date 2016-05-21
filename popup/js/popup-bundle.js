@@ -62,9 +62,6 @@
 	  };
 	
 	  chrome.tabs.query(queryInfo, function (tabs) {
-	    console.log(tabs[0]);
-	    console.log(tabs[0].url);
-	    console.log(tabs[0].title);
 	    callback(tabs[0].url, tabs[0].title);
 	  });
 	}
@@ -73,8 +70,6 @@
 	  document.getElementById('query').innerHTML = title;
 	  var terms = title.toLowerCase().split(" ");
 	  terms = terms.slice(0, terms.length - 3).join(" ");
-	  console.log(terms);
-	  console.log("ENCODED", encodeURIComponent(terms));
 	
 	  $.ajax({
 	    type: "GET",

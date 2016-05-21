@@ -3,13 +3,13 @@
 //sends history to backend on installation
 chrome.runtime.onInstalled.addListener(function(data){
   if(data.reason === "install"){
-    var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 90;
+    var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 30;
     var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
 
     chrome.history.search({
       'text' : "",
       'startTime' : oneWeekAgo,
-      'maxResults' : 1000000
+      'maxResults' : 1000
     }, function(historyItems){
 
       var chunkLength = 100;
