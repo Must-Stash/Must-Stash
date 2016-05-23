@@ -1,7 +1,8 @@
 module.exports = {
-  entry: './src/options.js',
+  entry: './src/background.js',
   output: {
-    filename: './js/options-bundle.js'
+    path: './js',
+    filename: 'background-bundle.js'
   },
   devtool: 'source-map',
   module: {
@@ -13,7 +14,7 @@ module.exports = {
         query: {
           presets: ['es2015']
         }
-      },
+      }
     ]
   }
 };

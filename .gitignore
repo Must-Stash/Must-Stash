@@ -1,1 +1,5 @@
 node_modules
+/background/js/*
+/popup/js/*
+/options/js/*
+!**/.gitkeep
