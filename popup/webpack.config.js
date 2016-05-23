@@ -1,7 +1,8 @@
 module.exports = {
-  entry: './popup.js',
+  entry: './src/popup.js',
   output: {
-    filename: './js/popup-bundle.js'
+    path: './js',
+    filename: 'popup-bundle.js'
   },
   devtool: 'source-map',
   module: {
@@ -9,8 +10,9 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
+        exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react']
+          presets: ['es2015']
         }
       },
     ]
