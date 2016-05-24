@@ -15,7 +15,7 @@ function postStorage() {
       chrome.storage.local.set({ activities: [] }, function() {
         $.ajax({
           type: "POST",
-          url: "http://127.0.0.1:3000/api/qa",
+          url: "http://www.gny-consulting.com/api/qa",
           dataType: 'json',
           data: {
             data: items.activities

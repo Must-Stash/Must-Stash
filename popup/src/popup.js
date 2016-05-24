@@ -17,7 +17,7 @@ function(tabs) {
 
       $.ajax({
         type: "GET",
-        url: "http://127.0.0.1:3000/api/search?q=" + encodeURIComponent(query),
+        url: "http://www.gny-consulting.com/api/search?q=" + encodeURIComponent(query),
         success: function(data) {
           console.log("successfully received data", data.success);
           results.innerHTML = data.success[0]._source.url;
@@ -33,7 +33,7 @@ searchBtn.addEventListener('click', function(evt) {
 
   $.ajax({
     type: "GET",
-    url: "http://127.0.0.1:3000/api/search?q=" + encodeURIComponent(query),
+    url: "http://www.gny-consulting.com/api/search?q=" + encodeURIComponent(query),
     success: function(data) {
       console.log("successfully received data");
       results.innerHTML = data.success[0]._source.url;
