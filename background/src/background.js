@@ -1,5 +1,6 @@
 'use strict';
 
+
 const $ = require('jquery');
 const url = require('url');
 
@@ -12,10 +13,12 @@ const postStorageInterval = setInterval(postStorage, 20000);
 function postStorage() {
   chrome.storage.local.get('activities', function(items) {
     if(items.activities.length > 0) {
+      var server = localStorage.getItem("muststashserver") || "www.gny-consulting.com";
+
       chrome.storage.local.set({ activities: [] }, function() {
         $.ajax({
           type: "POST",
-          url: "http://127.0.0.1:3000/api/qa",
+          url: "http://" + server + "/api/qa",
           dataType: 'json',
           data: {
             data: items.activities
