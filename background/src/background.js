@@ -45,7 +45,7 @@ chrome.webNavigation.onCommitted.addListener(function(webNavData) {
 
       activities.push(activity);
       chrome.storage.local.set({ activities }, function() {
-        console.log('saved activity %s : %s to local storage', items.queries[webNavData.tabId].query_string, webNavData.url);
+        console.log('saved activity %s to local storage', webNavData.url);
       });
     }
   });
