@@ -4,6 +4,10 @@ let searchBtn = document.querySelector('#search');
 let queryInput = document.querySelector('#query');
 let results = document.querySelector('#results');
 
+results.addEventListener("click", function(event){
+  chrome.tabs.create({url: event.target.href});
+});
+
 const server = localStorage.getItem("muststashserver") || "www.gny-consulting.com";
 
 chrome.tabs.query({
@@ -15,7 +19,7 @@ function(tabs) {
   chrome.storage.local.get('queries', function(items) {
     var query = items.queries[currTab.id].query_string;
     if(query) {
-      queryInput.value = query;
+      queryInput.value = decodeURIComponent(query);
 
       $.ajax({
         type: "GET",
@@ -48,5 +52,6 @@ searchBtn.addEventListener('click', function(evt) {
   });
 
 });
+
 
 
