@@ -4,6 +4,8 @@ let searchBtn = document.querySelector('#search');
 let queryInput = document.querySelector('#query');
 let results = document.querySelector('#results');
 
+const server = localStorage.getItem("muststashserver") || "www.gny-consulting.com";
+
 chrome.tabs.query({
   active: true,
   currentWindow: true
@@ -17,7 +19,7 @@ function(tabs) {
 
       $.ajax({
         type: "GET",
-        url: "http://www.gny-consulting.com/api/search?q=" + encodeURIComponent(query),
+        url: "http://" + server + "/api/search?q=" + encodeURIComponent(query),
         success: function(data) {
           console.log("successfully received data", data.success);
           results.innerHTML = data.success[0]._source.url;
@@ -33,7 +35,7 @@ searchBtn.addEventListener('click', function(evt) {
 
   $.ajax({
     type: "GET",
-    url: "http://www.gny-consulting.com/api/search?q=" + encodeURIComponent(query),
+    url: "http://" + server + "/api/search?q=" + encodeURIComponent(query),
     success: function(data) {
       console.log("successfully received data");
       results.innerHTML = data.success[0]._source.url;
