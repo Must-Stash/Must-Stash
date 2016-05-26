@@ -10,10 +10,12 @@ results.addEventListener("click", function(event){
 });
 
 more.addEventListener("click", function(event){
-  chrome.tabs.create({url: event.target.href + "#" + encodeURIComponent(queryInput.value)});
+  var server = localStorage.getItem("muststashserver") || "must-stash.devleague.com";
+
+  chrome.tabs.create({url: "http://" + server + "/#" + encodeURIComponent(queryInput.value)});
 });
 
-const server = localStorage.getItem("muststashserver") || "www.gny-consulting.com";
+const server = localStorage.getItem("muststashserver") || "must-stash.devleague.com";
 
 chrome.tabs.query({
   active: true,

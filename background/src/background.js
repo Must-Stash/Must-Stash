@@ -13,7 +13,7 @@ const postStorageInterval = setInterval(postStorage, 20000);
 function postStorage() {
   chrome.storage.local.get('activities', function(items) {
     if(items.activities.length > 0) {
-      var server = localStorage.getItem("muststashserver") || "www.gny-consulting.com";
+      var server = localStorage.getItem("muststashserver") || "must-stash.devleague.com";
 
       chrome.storage.local.set({ activities: [] }, function() {
         $.ajax({
