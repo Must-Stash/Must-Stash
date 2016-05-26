@@ -45,10 +45,8 @@ Must Stash uses a number of open source projects to work properly:
 
 You can contribute to both parts of Must-Stash:
 
--The Extension component: 
-[https://github.com/Must-Stash/Must-Stash-Extension]
--And the Server component: 
-[https://github.com/Must-Stash/Must-Stash-Server]
+- The Extension component: [https://github.com/Must-Stash/Must-Stash-Extension]
+- And the Server component: [https://github.com/Must-Stash/Must-Stash-Server]
 
 License
 ----
