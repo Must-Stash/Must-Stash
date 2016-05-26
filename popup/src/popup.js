@@ -19,9 +19,9 @@ function(tabs) {
         type: "GET",
         url: "http://127.0.0.1:3000/api/search?q=" + encodeURIComponent(query),
         success: function(data) {
-          console.log("successfully received data", data.success);
-          results.innerHTML = data.success[0]._source.url;
-          results.href = data.success[0]._source.url;
+          console.log("successfully received data", data.success[0]);
+          results.innerHTML = data.success[0].url;
+          results.href = data.success[0].url;
         }
       });
     }
@@ -35,9 +35,9 @@ searchBtn.addEventListener('click', function(evt) {
     type: "GET",
     url: "http://127.0.0.1:3000/api/search?q=" + encodeURIComponent(query),
     success: function(data) {
-      console.log("successfully received data");
-      results.innerHTML = data.success[0]._source.url;
-      results.href = data.success[0]._source.url;
+      console.log("successfully received data", data);
+      results.innerHTML = data.success[0].url;
+      results.href = data.success[0].url;
     },
     failure: function(err) {
       results.innerHTML = "";
