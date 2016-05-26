@@ -32,7 +32,7 @@ After this, it's pretty easy to unpack and run on Chrome:
 - Click Load unpacked extension… to pop up a file-selection dialog.
 - Navigate to the directory in which your Must-Stash files live, and select it.
 
-### Example
+### Screen Casts
 
 > video goes here
 
