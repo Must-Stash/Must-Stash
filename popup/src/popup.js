@@ -3,8 +3,13 @@ const $ = require('jquery');
 let searchBtn = document.querySelector('#search');
 let queryInput = document.querySelector('#query');
 let results = document.querySelector('#results');
+let more = document.querySelector('#more');
 
 results.addEventListener("click", function(event){
+  chrome.tabs.create({url: event.target.href});
+});
+
+more.addEventListener("click", function(event){
   chrome.tabs.create({url: event.target.href});
 });
 
