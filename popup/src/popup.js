@@ -34,22 +34,46 @@ function(tabs) {
   });
 });
 
-searchBtn.addEventListener('click', function(evt) {
-  let query = queryInput.value;
+queryInput.addEventListener('keypress', function(evt) {
+  var key = evt.which || evt.keyCode;
 
-  $.ajax({
-    type: "GET",
-    url: "http://" + server + "/api/search?q=" + encodeURIComponent(query),
-    success: function(data) {
-      console.log("successfully received data", data);
-      results.innerHTML = data.success[0].url;
-      results.href = data.success[0].url;
-    },
-    failure: function(err) {
-      results.innerHTML = "";
-      results.href = "#";
-    }
-  });
+  if(key === 13){
+    let query = queryInput.value;
+
+    $.ajax({
+      type: "GET",
+      url: "http://" + server + "/api/search?q=" + encodeURIComponent(query),
+      success: function(data) {
+        console.log("successfully received data", data);
+        results.innerHTML = data.success[0].url;
+        results.href = data.success[0].url;
+      },
+      failure: function(err) {
+        results.innerHTML = "";
+        results.href = "#";
+      }
+    });
+  }
+
+});
+
+searchBtn.addEventListener('click', function(evt) {
+
+    let query = queryInput.value;
+
+    $.ajax({
+      type: "GET",
+      url: "http://" + server + "/api/search?q=" + encodeURIComponent(query),
+      success: function(data) {
+        console.log("successfully received data", data);
+        results.innerHTML = data.success[0].url;
+        results.href = data.success[0].url;
+      },
+      failure: function(err) {
+        results.innerHTML = "";
+        results.href = "#";
+      }
+    });
 
 });
 

@@ -41,7 +41,10 @@ chrome.webNavigation.onCommitted.addListener(function(webNavData) {
       activities = items.activities;
     }
 
-    if(webNavData.transitionType === 'link' && !/.*\/\/www.google.com.*\?.*/.test(webNavData.url)) {
+    if(webNavData.transitionType === 'link' && !/.*\/\/www.google.com.*\?.*/.test(webNavData.url)
+      && !/.*localhost.*/.test(webNavData.url)
+      && !/.*must-stash.*/.test(webNavData.url)
+      && !/.*gny-consulting.*/.test(webNavData.url)) {
       let activity = {};
       activity.activity = webNavData;
       activity.query = items.queries ? items.queries[webNavData.tabId] : null;
