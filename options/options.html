@@ -3,15 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>Must-Stash Options</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans|Montserrat' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <h1>Options</h1>
-  <h2>Current Server</h3>
-  <h3 id="server">www.gny-consulting.com</h3>
-  <p>Change to:</p>
-  <input type="text" id="server-change">
-  <button id="submit">Submit</button>
+  <div class="optionsMain">
+    <div class="icon" style="background-image: url(./white_wall_hash.png)">
+      <img class="pic" src="./horizontal-blue-elephant.png"></img>
+    </div>
 
+    <div class="optionsSelect">
+      <h1 class="server">Current Server</h1>
+      <p id="server">www.gny-consulting.com</p>
+      <p class="changeTo">Change to:</p>
+      <input type="text" id="server-change" style="border-style: inset;"placeholder="Enter Server Name">
+      <button class="change" id="submit">Change</button>
+    </div>
+  </div>
   <script type="text/javascript" src="./js/options-bundle.js"></script>
 </body>
 </html>
