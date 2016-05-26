@@ -1,0 +1,25 @@
+#searchbar {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+#query {
+  font-family: 'Montserrat', sans-serif;
+  max-width: 80%;
+  text-align: center;
+  font-size: 12px;
+  border: none;
+  border-bottom: 4px solid;
+  border-color: #99D0E4;
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 10px 6px -6px #777;
+}
+
+#search {
+  max-width: 20%;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
