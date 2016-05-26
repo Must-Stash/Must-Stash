@@ -2,7 +2,7 @@
 
 MustStash is a google chrome extension that preserves and analyzes your query terms and results as you browse. On click, the MustStash will display the site link most relevant to you and your search input on the google search bar.
 
-## Installation
+### Installation
 Must-Stash requires [Node.js](https://nodejs.org/) v4+ to run.
 ```sh
 - Open your favourite Terminal and run these commands: 
