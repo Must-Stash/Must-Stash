@@ -10,7 +10,7 @@ results.addEventListener("click", function(event){
 });
 
 more.addEventListener("click", function(event){
-  chrome.tabs.create({url: event.target.href});
+  chrome.tabs.create({url: event.target.href + "#" + encodeURIComponent(queryInput.value)});
 });
 
 const server = localStorage.getItem("muststashserver") || "www.gny-consulting.com";
