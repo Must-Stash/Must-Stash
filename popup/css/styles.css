@@ -1,0 +1,41 @@
+#searchbar {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+#query {
+  font-family: 'Montserrat', sans-serif;
+  width: 300px;
+  text-align: center;
+  font-size: 12px;
+  border: none;
+  border-bottom: 4px solid;
+  border-color: #99D0E4;
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 10px 6px -6px #777;
+}
+
+#search {
+  max-width: 20px;
+}
+
+#search:hover {
+  cursor: pointer;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px;
+}
+
+
+#MSlogo {
+  height: 30px;
+  margin-right: 10px;
+}
+
+#more {
+  font-size: 10px;
+  float: right;
+}
