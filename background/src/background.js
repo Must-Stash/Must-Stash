@@ -67,11 +67,11 @@ chrome.webRequest.onCompleted.addListener(function(webReqData){
       queries = items.queries;
     }
 
-    webReqData.query_string = url.parse(webReqData.url, true).query.q || url.parse(webReqData.url, true).hash.substring(3);
+    webReqData.query_string = url.parse(webReqData.url, true).query.q;
     queries[webReqData.tabId] = webReqData;
 
     chrome.storage.local.set({ queries : queries }, function() {
       console.log('saved query %s to local storage', webReqData.query_string);
     });
   });
-}, {urls: ["*://www.google.com/*?*"], types: ['xmlhttprequest', 'main_frame']});
+}, {urls: ["*://www.google.com/*?*"], types: ['xmlhttprequest']});
